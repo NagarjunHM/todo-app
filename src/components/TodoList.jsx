@@ -31,7 +31,11 @@ const TodoList = () => {
 
       {currentUserTodos.map((todo) => (
         <div
-          className={`card w-96 h-48 flex-shrink-0 card-bordered bg-base-200 card-compact p-1`}
+          className={`card w-96 h-48 flex-shrink-0 card-bordered bg-base-200 card-compact p-1 ${
+            editToggledTodo !== todo.id
+              ? ""
+              : "scale-[1.05] z-50 duration-200 transition-all outline outline-offset-4"
+          }`}
           key={todo.id}
         >
           <div className="flex flex-col card-body">
@@ -45,7 +49,7 @@ const TodoList = () => {
                 ) : (
                   <div className="tooltip " data-tip="Make it Complete">
                     <div className="my-2 badge badge-error badge-outline">
-                      InComplete
+                      In-Complete
                     </div>
                   </div>
                 )}
@@ -58,7 +62,7 @@ const TodoList = () => {
               <div className="flex items-center">
                 <form className="flex flex-grow">
                   <textarea
-                    className="w-[220px] h-[75px] textarea textarea-primary"
+                    className="w-[220px] h-[75px] textarea textarea-neutral"
                     onChange={(e) => {
                       setTodoTextArea(e.target.value);
                     }}
