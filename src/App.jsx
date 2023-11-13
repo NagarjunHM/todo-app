@@ -17,6 +17,7 @@ const App = () => {
       path: "/",
       element: (
         <div>
+          <NavBar />
           <ToastContainer
             position="top-right"
             autoClose={3500}
@@ -29,7 +30,6 @@ const App = () => {
             pauseOnHover={false}
             theme="colored"
           />
-          <NavBar />
         </div>
       ),
       children: [
@@ -52,9 +52,16 @@ export default App;
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useSelector(todosSelector);
-
+  // console.log("ProtectedRoute rendering");
   if (user === null) {
-    return <Navigate to="/" replace={true} />;
+    // toast.error("you are not authorized");
+
+    return (
+      <div>
+        <Navigate to="/" replace={true} />
+      </div>
+    );
   }
+
   return children;
 };

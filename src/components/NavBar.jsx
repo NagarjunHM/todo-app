@@ -5,10 +5,11 @@ import { actions } from "../redux/todosReducer";
 import { getInitialState } from "../redux/todosReducer";
 import { Outlet } from "react-router-dom";
 import { todosSelector } from "../redux/todosReducer";
-
+import { useNavigate } from "react-router-dom";
 const NavBar = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(todosSelector);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getInitialState());
@@ -29,7 +30,8 @@ const NavBar = () => {
                 </button>
                 <button
                   onClick={() => {
-                    dispatch(actions.resetSelectedUser());
+                    dispatch(actions.resetSelectedUser(""));
+                    navigate("/");
                   }}
                   className="btn btn-warning btn-sm"
                 >

@@ -5,7 +5,8 @@ import { todosSelector } from "../redux/todosReducer";
 import { FiEdit2 } from "react-icons/fi";
 import { BsSave2 } from "react-icons/bs";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
-import { deleteTodo } from "../redux/todosReducer";
+import { deleteTodo, toggleTodo, todoTitleEdit } from "../redux/todosReducer";
+import { toast } from "react-toastify";
 
 const TodoList = () => {
   const { todos, user } = useSelector(todosSelector);
@@ -16,7 +17,7 @@ const TodoList = () => {
       return todo;
     }
   });
-  console.log(currentUserTodos);
+  // console.log(currentUserTodos);
   const [editToggledTodo, setEditToggledTodo] = useState(null);
   const [todoTextArea, setTodoTextArea] = useState("");
 
@@ -29,6 +30,20 @@ const TodoList = () => {
   // function handling the delete todo
   const handleDeleteTodo = (todo) => {
     dispatch(deleteTodo(todo));
+  };
+
+  //function to handle toggle complete and incomplete todo
+  const handleToggleTodo = (todo) => {
+    dispatch(toggleTodo(todo));
+  };
+
+  //function to handle todo title change
+  const handleTodoTitleChange = (todo) => {
+    if (!todoTextArea) {
+      toast.error("Todo cannot be empty");
+      return;
+    }
+    dispatch(todoTitleEdit({ title: todoTextArea, id: todo.id }));
   };
 
   return (
@@ -50,11 +65,23 @@ const TodoList = () => {
               <div className="flex flex-grow cursor-pointer">
                 {todo.completed ? (
                   <div className="tooltip " data-tip="Make it In-Complete">
-                    <div className="my-2 badge badge-accent ">Completed</div>
+                    <div
+                      className="my-2 badge badge-accent "
+                      onClick={() => {
+                        handleToggleTodo(todo);
+                      }}
+                    >
+                      Completed
+                    </div>
                   </div>
                 ) : (
                   <div className="tooltip " data-tip="Make it Complete">
-                    <div className="my-2 badge badge-error badge-outline">
+                    <div
+                      className="my-2 badge badge-error badge-outline"
+                      onClick={() => {
+                        handleToggleTodo(todo);
+                      }}
+                    >
                       In-Complete
                     </div>
                   </div>
@@ -77,7 +104,12 @@ const TodoList = () => {
                 </form>
                 <div className="flex gap-x-4">
                   <div className="tooltip tooltip-top" data-tip="Save">
-                    <button className="btn btn-circle btn-sm btn-primary">
+                    <button
+                      className="btn btn-circle btn-sm btn-primary"
+                      onClick={() => {
+                        handleTodoTitleChange(todo);
+                      }}
+                    >
                       <BsSave2 size="1.2em" />
                     </button>
                   </div>

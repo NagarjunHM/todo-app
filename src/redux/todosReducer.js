@@ -52,6 +52,51 @@ export const deleteTodo = createAsyncThunk(
   }
 );
 
+// function to toggle complete and inComplete
+export const toggleTodo = createAsyncThunk(
+  "todo/toggleTodo",
+  async (payload) => {
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${payload.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          completed: !payload.completed,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  }
+);
+
+//function to Edit the todo title
+export const todoTitleEdit = createAsyncThunk(
+  "todo/titleEdit",
+  async (payload) => {
+    const { title, id } = payload;
+    console.log(id, title);
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          title: title,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    );
+    const data = await response.json();
+    // console.log(data);
+    return data;
+  }
+);
+
 const initialState = {
   todos: [],
   isLoading: false,
@@ -70,7 +115,7 @@ const todosSlice = createSlice({
 
     // function to reset the selected user
     resetSelectedUser: (state) => {
-      state.user = null;
+      state.user = "";
     },
   },
   extraReducers: (builder) => {
@@ -100,7 +145,7 @@ const todosSlice = createSlice({
       state.todos = [action.payload, ...state.todos];
       state.isLoading = false;
       state.error = null;
-      toast.success(action.payload.title + " Created Successful ");
+      toast.success(action.payload.title + " Created Successfully ");
     });
 
     // createNewTodo rejected
@@ -125,7 +170,6 @@ const todosSlice = createSlice({
           return todo;
         }
       });
-
       state.todos = [...tempTodo];
     });
 
@@ -133,6 +177,61 @@ const todosSlice = createSlice({
     builder.addCase(deleteTodo.rejected, (state, action) => {
       toast.error("Error cannot be deleted");
       state.isLoading = false;
+    });
+
+    // toggleTodo pending
+    builder.addCase(toggleTodo.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
+    // toggleTodo rejected
+    builder.addCase(toggleTodo.rejected, (state, action) => {
+      toast.error("toggle not complete");
+      state.isLoading = false;
+    });
+
+    // toggle todo fulfullied
+    builder.addCase(toggleTodo.fulfilled, (state, action) => {
+      state.isLoading = false;
+      let tempTodo = [...state.todos];
+      tempTodo = tempTodo.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return {
+            ...todo,
+            completed: action.payload.completed,
+          };
+        }
+        return todo;
+      });
+      state.todos = [...tempTodo];
+    });
+
+    // todo title edit pending
+    builder.addCase(todoTitleEdit.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
+    // todo title edit rejected
+    builder.addCase(todoTitleEdit.rejected, (state, action) => {
+      state.isLoading = false;
+      toast.error(action.error.message);
+    });
+
+    // todo title edit fulfilled
+    builder.addCase(todoTitleEdit.fulfilled, (state, action) => {
+      state.isLoading = false;
+      let tempTodo = [...state.todos];
+      tempTodo = tempTodo.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return {
+            ...todo,
+            title: action.payload.title,
+          };
+        }
+        return todo;
+      });
+      state.todos = [...tempTodo];
+      toast.success(action.payload.title + " edited successfully");
     });
   },
 });
