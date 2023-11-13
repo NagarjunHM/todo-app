@@ -32,8 +32,23 @@ export const createNewTodo = createAsyncThunk(
     if (!response.ok) {
       throw new Error(`Failed to create a new todo (HTTP ${response.status})`);
     }
+    return await response.json();
+  }
+);
+
+// function to delete a todo
+export const deleteTodo = createAsyncThunk(
+  "todo/deleteTodo",
+  async (payload) => {
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${payload.id}`,
+      {
+        method: "DELETE",
+      }
+    );
     const data = await response.json();
-    return data;
+    return payload;
+    // since the delete function does not return anything i am passing the paramater as the return value
   }
 );
 
@@ -91,6 +106,32 @@ const todosSlice = createSlice({
     // createNewTodo rejected
     builder.addCase(createNewTodo.rejected, (state, action) => {
       toast.error("Error " + action.error.message);
+      state.isLoading = false;
+    });
+
+    // deleteTodo pending
+    builder.addCase(deleteTodo.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
+    // deleteTodo fulfilled
+    builder.addCase(deleteTodo.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+      toast.info(action.payload.title + " Deleted Successfully ");
+      let tempTodo = [...state.todos];
+      tempTodo = tempTodo.filter((todo) => {
+        if (todo.id !== action.payload.id) {
+          return todo;
+        }
+      });
+
+      state.todos = [...tempTodo];
+    });
+
+    // deleteTodo rejected
+    builder.addCase(deleteTodo.rejected, (state, action) => {
+      toast.error("Error cannot be deleted");
       state.isLoading = false;
     });
   },

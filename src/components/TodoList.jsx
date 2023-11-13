@@ -1,14 +1,15 @@
 import React from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { todosSelector } from "../redux/todosReducer";
 import { FiEdit2 } from "react-icons/fi";
 import { BsSave2 } from "react-icons/bs";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import { deleteTodo } from "../redux/todosReducer";
 
 const TodoList = () => {
   const { todos, user } = useSelector(todosSelector);
-
+  const dispatch = useDispatch();
   // filter method to fetch the details of only logged in user
   const currentUserTodos = todos.filter((todo) => {
     if (todo.userId === user) {
@@ -23,6 +24,11 @@ const TodoList = () => {
   const handleTodoEditVisibility = (todo) => {
     setEditToggledTodo(todo.id);
     setTodoTextArea(todo.title);
+  };
+
+  // function handling the delete todo
+  const handleDeleteTodo = (todo) => {
+    dispatch(deleteTodo(todo));
   };
 
   return (
@@ -109,7 +115,12 @@ const TodoList = () => {
                   </div>
                   {/* delete button */}
                   <div className="tooltip tooltip-right " data-tip="Delete">
-                    <button className="btn btn-circle btn-sm btn-error btn-outline">
+                    <button
+                      className="btn btn-circle btn-sm btn-error btn-outline"
+                      onClick={() => {
+                        handleDeleteTodo(todo);
+                      }}
+                    >
                       <AiOutlineDelete size="1.3em" />
                     </button>
                   </div>
