@@ -15,7 +15,7 @@ const TodoList = () => {
       return todo;
     }
   });
-
+  console.log(currentUserTodos);
   const [editToggledTodo, setEditToggledTodo] = useState(null);
   const [todoTextArea, setTodoTextArea] = useState("");
 

@@ -8,12 +8,30 @@ import {
 } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { todosSelector } from "./redux/todosReducer";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <NavBar />,
+      element: (
+        <div>
+          <ToastContainer
+            position="top-right"
+            autoClose={3500}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss={false}
+            draggable
+            pauseOnHover={false}
+            theme="colored"
+          />
+          <NavBar />
+        </div>
+      ),
       children: [
         { index: true, element: <SelectUserPage /> },
         {
@@ -34,7 +52,9 @@ export default App;
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useSelector(todosSelector);
-  console.log(user);
-  if (user === null) return <Navigate to="/" replace={true} />;
+
+  if (user === null) {
+    return <Navigate to="/" replace={true} />;
+  }
   return children;
 };
