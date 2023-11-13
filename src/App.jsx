@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   const router = createBrowserRouter([
     {
-      path: "/todo-app",
+      path: process.env.PUBLIC_URL + "/",
       element: (
         <div>
           <NavBar />
@@ -35,7 +35,7 @@ const App = () => {
       children: [
         { index: true, element: <SelectUserPage /> },
         {
-          path: "/todo-app/UserTodo",
+          path: "UserTodo",
           element: (
             <ProtectedRoute>
               <UserTodo />
