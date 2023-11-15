@@ -93,8 +93,7 @@ export const todoTitleEdit = createAsyncThunk(
       }
     );
     const data = await response.json();
-    // console.log(data);
-    return data;
+    return ({title:data.title,id:id});
   }
 );
 
@@ -223,11 +222,12 @@ const todosSlice = createSlice({
     builder.addCase(todoTitleEdit.fulfilled, (state, action) => {
       state.isLoading = false;
       let tempTodo = [...state.todos];
+      const {title,id} = action.payload;
       tempTodo = tempTodo.map((todo) => {
-        if (todo.id == action.payload.id) {
+        if (todo.id == id) {
           return {
             ...todo,
-            title: action.payload.title,
+            title: title,
           };
         }
         return todo;
