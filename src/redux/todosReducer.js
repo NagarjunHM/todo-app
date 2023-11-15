@@ -32,7 +32,11 @@ export const createNewTodo = createAsyncThunk(
     if (!response.ok) {
       throw new Error(`Failed to create a new todo (HTTP ${response.status})`);
     }
-    return await response.json();
+
+    const data =  await response.json();
+    data.id = Math.floor(Math.random() * 1000000001);
+    console.log(data);
+    return data;
   }
 );
 
