@@ -22,7 +22,7 @@ const App = () => {
           <NavBar />
           <ToastContainer
             position="top-right"
-            autoClose={3500}
+            autoClose={2500}
             hideProgressBar={false}
             newestOnTop
             closeOnClick
