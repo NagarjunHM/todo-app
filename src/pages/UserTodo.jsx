@@ -4,7 +4,9 @@ import { todosSelector } from "../redux/todosReducer";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 
 const UserTodo = () => {
-  const { isLoading } = useSelector(todosSelector);
+  const { isLoading,user } = useSelector(todosSelector);
+
+ 
 
   return (
     <div>

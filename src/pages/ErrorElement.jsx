@@ -15,7 +15,7 @@ const ErrorElement = () => {
         </button>
 </div>
     <div className=''><TbError404 size="10em" /></div>
-    <div className='p-3 border-b-2 border-red-500'>Something went Wrong</div>
+    <div className='p-3 border-b-2 border-red-500'>Page Not Found</div>
     </div>
     </div>
   )

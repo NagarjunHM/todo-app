@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const { user } = useSelector(todosSelector);
+
   const router = createBrowserRouter([
     {
       errorElement:<ErrorElement />,
@@ -39,7 +40,7 @@ const App = () => {
           path: "UserTodo",
           element: (
             <ProtectedRoute user={user}>
-              <UserTodo />
+              <UserTodo />              
             </ProtectedRoute>
           ),
         },

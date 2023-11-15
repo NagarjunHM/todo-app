@@ -35,7 +35,7 @@ export const createNewTodo = createAsyncThunk(
 
     const data =  await response.json();
     data.id = Math.floor(Math.random() * 1000000001);
-    console.log(data);
+    // console.log(data);
     return data;
   }
 );
@@ -104,8 +104,8 @@ export const todoTitleEdit = createAsyncThunk(
 const initialState = {
   todos: [],
   isLoading: false,
-  error: null,
-  user: null,
+  error: "",
+  user: "",
 };
 
 const todosSlice = createSlice({
