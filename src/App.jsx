@@ -6,6 +6,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { todosSelector } from "./redux/todosReducer";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import ErrorElement from "./pages/ErrorElement";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,6 +14,7 @@ const App = () => {
   const { user } = useSelector(todosSelector);
   const router = createBrowserRouter([
     {
+      errorElement:<ErrorElement />,
       path: "/",
       element: (
         <div>
