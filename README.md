@@ -16,7 +16,7 @@ Welcome to the React Todo App! This app integrates with a dummy API to perform C
 
 3. ### Update Todo Item:
 
-- Updates an existing todo item using a PUT call to the API.
+- Updates an existing todo item using a PATCH call to the API.
 - Reflects the changes in the React state.
 
 4. ### Delete Todo Item:
