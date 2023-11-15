@@ -1,7 +1,7 @@
 import SelectUserPage from "./pages/SelectUserPage";
 import NavBar from "./components/NavBar";
 import UserTodo from "./pages/UserTodo";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { todosSelector } from "./redux/todosReducer";
 import { ToastContainer } from "react-toastify";
@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const { user } = useSelector(todosSelector);
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       errorElement:<ErrorElement />,
       path: "/",
