@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { todosSelector } from "../redux/todosReducer";
@@ -39,11 +38,13 @@ const TodoList = () => {
 
   //function to handle todo title change
   const handleTodoTitleChange = (todo) => {
+    console.log("Before dispatching todoTitleEdit:", todo.title, todo.id);
     if (!todoTextArea) {
       toast.error("Todo cannot be empty");
       return;
     }
     dispatch(todoTitleEdit({ title: todoTextArea, id: todo.id }));
+    console.log("After dispatching todoTitleEdit:", todo.title, todo.id);
   };
 
   return (

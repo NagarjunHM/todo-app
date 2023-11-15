@@ -1,4 +1,3 @@
-import React from "react";
 import AddTodosFormComp from "../components/AddTodosFormComp";
 import TodoList from "../components/TodoList";
 import { todosSelector } from "../redux/todosReducer";

@@ -1,20 +1,19 @@
 import SelectUserPage from "./pages/SelectUserPage";
 import NavBar from "./components/NavBar";
 import UserTodo from "./pages/UserTodo";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { todosSelector } from "./redux/todosReducer";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./routes/ProtectedRoute";
+
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
+  const { user } = useSelector(todosSelector);
   const router = createBrowserRouter([
     {
-      path: process.env.PUBLIC_URL + "/",
+      path: "/",
       element: (
         <div>
           <NavBar />
@@ -37,7 +36,7 @@ const App = () => {
         {
           path: "UserTodo",
           element: (
-            <ProtectedRoute>
+            <ProtectedRoute user={user}>
               <UserTodo />
             </ProtectedRoute>
           ),
@@ -49,19 +48,3 @@ const App = () => {
 };
 
 export default App;
-
-const ProtectedRoute = ({ children }) => {
-  const { user } = useSelector(todosSelector);
-  // console.log("ProtectedRoute rendering");
-  if (user === null) {
-    // toast.error("you are not authorized");
-
-    return (
-      <div>
-        <Navigate to="/todo-app" replace={true} />
-      </div>
-    );
-  }
-
-  return children;
-};

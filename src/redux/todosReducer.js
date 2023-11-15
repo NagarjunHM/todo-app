@@ -46,7 +46,7 @@ export const deleteTodo = createAsyncThunk(
         method: "DELETE",
       }
     );
-    const data = await response.json();
+    await response.json();
     return payload;
     // since the delete function does not return anything i am passing the paramater as the return value
   }
@@ -69,7 +69,8 @@ export const toggleTodo = createAsyncThunk(
       }
     );
     const data = await response.json();
-    return data;
+    return({completed:data.completed,
+    id:payload.id});
   }
 );
 
@@ -120,7 +121,7 @@ const todosSlice = createSlice({
   },
   extraReducers: (builder) => {
     // initialState pending
-    builder.addCase(getInitialState.pending, (state, action) => {
+    builder.addCase(getInitialState.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
@@ -136,7 +137,7 @@ const todosSlice = createSlice({
     });
 
     // createNewTodo pending
-    builder.addCase(createNewTodo.pending, (state, action) => {
+    builder.addCase(createNewTodo.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -155,7 +156,7 @@ const todosSlice = createSlice({
     });
 
     // deleteTodo pending
-    builder.addCase(deleteTodo.pending, (state, action) => {
+    builder.addCase(deleteTodo.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -174,31 +175,32 @@ const todosSlice = createSlice({
     });
 
     // deleteTodo rejected
-    builder.addCase(deleteTodo.rejected, (state, action) => {
+    builder.addCase(deleteTodo.rejected, (state) => {
       toast.error("Error cannot be deleted");
       state.isLoading = false;
     });
 
     // toggleTodo pending
-    builder.addCase(toggleTodo.pending, (state, action) => {
+    builder.addCase(toggleTodo.pending, (state) => {
       state.isLoading = true;
     });
 
     // toggleTodo rejected
-    builder.addCase(toggleTodo.rejected, (state, action) => {
+    builder.addCase(toggleTodo.rejected, (state) => {
       toast.error("toggle not complete");
       state.isLoading = false;
     });
 
     // toggle todo fulfullied
     builder.addCase(toggleTodo.fulfilled, (state, action) => {
+      const {completed,id} = action.payload;
       state.isLoading = false;
       let tempTodo = [...state.todos];
       tempTodo = tempTodo.map((todo) => {
-        if (todo.id === action.payload.id) {
+        if (todo.id == id) {
           return {
             ...todo,
-            completed: action.payload.completed,
+            completed: completed,
           };
         }
         return todo;
@@ -207,7 +209,7 @@ const todosSlice = createSlice({
     });
 
     // todo title edit pending
-    builder.addCase(todoTitleEdit.pending, (state, action) => {
+    builder.addCase(todoTitleEdit.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -222,7 +224,7 @@ const todosSlice = createSlice({
       state.isLoading = false;
       let tempTodo = [...state.todos];
       tempTodo = tempTodo.map((todo) => {
-        if (todo.id === action.payload.id) {
+        if (todo.id == action.payload.id) {
           return {
             ...todo,
             title: action.payload.title,
